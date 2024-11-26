@@ -1,0 +1,96 @@
+<Window
+    x:Class="DockBar.Avalonia.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:DockBar.Avalonia.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="using:DockBar.DockItem"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:DockBar.Avalonia.ViewModels"
+    Title="DockBar"
+    x:CompileBindings="True"
+    x:DataType="vm:MainWindowViewModel"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    mc:Ignorable="d">
+
+    <!--<Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>-->
+    <Window.Styles>
+        <!--  设置透明窗体  -->
+        <Style Selector="Window">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="SystemDecorations" Value="None" />
+        </Style>
+
+    </Window.Styles>
+    <Window.ContextMenu>
+        <ContextMenu>
+            <ContextMenu.Background>
+                <SolidColorBrush Opacity="0.9" Color="#222222" />
+            </ContextMenu.Background>
+            <MenuItem Click="AddLinkMenuItem_Clicked" Header="添加项目">
+                <MenuItem.Icon>
+                    <TextBlock Classes="FontIcon" Text="&#xE710;" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                Click="DeleteLinkMenuItem_Clicked"
+                Header="删除该链接"
+                IsEnabled="{Binding IsSelectedDockLink}" />
+            <MenuItem Click="MoveMenuItem_Clicked" Header="移动模式">
+                <MenuItem.Icon>
+                    <TextBlock Classes="FontIcon" Text="&#xE7C2;" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Click="SettingMenuItem_Clicked" Header="设置">
+                <MenuItem.Icon>
+                    <TextBlock Classes="FontIcon" Text="&#xE713;" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Click="CloseMenuItem_Clicked" Header="退出">
+                <MenuItem.Icon>
+                    <TextBlock
+                        Classes="FontIcon"
+                        Foreground="Red"
+                        Text="&#xE711;" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.ContextMenu>
+
+
+    <!--  功能区  -->
+    <Grid
+        Width="{Binding DockPanelWidth}"
+        Height="{Binding DockPanelHeight}"
+        Background="AntiqueWhite">
+        <ItemsControl
+            Name="DockItemList"
+            Margin="{Binding Global.DockItemListMargin}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Background="AliceBlue"
+            DragDrop.AllowDrop="True"
+            ItemsSource="{Binding Links, Mode=OneWay}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="{Binding Global.DockItemSpacing}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="dd:IDockItem">
+                    <controls:DockItemControl
+                        VerticalAlignment="Bottom"
+                        DockItem="{Binding .}"
+                        IsHitTestVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsDockItemPanelEnabled}"
+                        PointerPressed="DockItem_PointerPressed"
+                        Size="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).Global.DockItemSize}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+
+</Window>

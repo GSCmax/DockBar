@@ -1,0 +1,117 @@
+<Window
+    x:Class="DockBar.Avalonia.SettingWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:DockBar.Avalonia.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:DockBar.Avalonia.ViewModels"
+    Title="设置窗口"
+    Width="800"
+    Height="450"
+    x:DataType="vm:SettingWindowViewModel"
+    mc:Ignorable="d">
+
+    <Window.Styles>
+        <Style Selector="Window">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Opacity="0.8" Color="#222222" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ExtendClientAreaToDecorationsHint" Value="True" />
+            <Setter Property="ExtendClientAreaChromeHints" Value="NoChrome" />
+            <Setter Property="TransparencyLevelHint" Value="AcrylicBlur" />
+            <Setter Property="WindowStartupLocation" Value="CenterOwner" />
+        </Style>
+    </Window.Styles>
+    <Grid>
+        <Grid RowDefinitions="32,auto">
+            <!--  标题栏区域  -->
+            <Grid
+                Grid.Row="0"
+                Margin="8,0,8,0"
+                ColumnDefinitions="*,auto">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    IsHitTestVisible="False"
+                    Text="{Binding $parent[Window].Title}" />
+                <Button Grid.Column="1" Click="CloseButton_Clicked">
+                    <TextBlock Classes="FontIcon" Text="&#xE711;" />
+                </Button>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid>
+                    <Grid.Styles>
+                        <Style Selector="Expander">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        </Style>
+                    </Grid.Styles>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel
+                            Margin="16"
+                            Orientation="Vertical"
+                            Spacing="16">
+                            <Expander>
+                                <Expander.Header>
+                                    <TextBlock Classes="FontIcon">
+                                        <Run Text="&#xE740;" />
+                                        <Run Text="尺寸大小" />
+                                    </TextBlock>
+                                </Expander.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <controls:SettingCard Header="停靠项目尺寸">
+                                        <NumericUpDown
+                                            Width="256"
+                                            FormatString="0"
+                                            Maximum="256"
+                                            Minimum="24"
+                                            Value="{Binding Global.DockItemSize, Mode=TwoWay}" />
+                                    </controls:SettingCard>
+                                    <controls:SettingCard Header="停靠项目间距">
+                                        <NumericUpDown
+                                            Width="256"
+                                            FormatString="0"
+                                            Maximum="256"
+                                            Minimum="0"
+                                            Value="{Binding Global.DockItemSpacing, Mode=TwoWay}" />
+                                    </controls:SettingCard>
+                                    <controls:SettingCard Header="停靠项目聚焦放大比例">
+                                        <NumericUpDown
+                                            Width="256"
+                                            FormatString="0.00"
+                                            Increment="0.01"
+                                            Maximum="4"
+                                            Minimum="0"
+                                            Value="{Binding Global.DockItemExtendRate, Mode=TwoWay}" />
+                                    </controls:SettingCard>
+                                </StackPanel>
+                            </Expander>
+                            <Expander>
+                                <Expander.Header>
+                                    <TextBlock Classes="FontIcon">
+                                        <Run Text="&#xE740;" />
+                                        <Run Text="自动定位" />
+                                    </TextBlock>
+                                </Expander.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <controls:SettingCard Header="启用自动定位">
+                                        <CheckBox IsChecked="{Binding Global.IsAutoPosition, Mode=TwoWay}" />
+                                    </controls:SettingCard>
+                                    <controls:SettingCard Header="自动定位底部距离" IsEnabled="{Binding Global.IsAutoPosition, Mode=OneWay}">
+                                        <NumericUpDown
+                                            Width="256"
+                                            FormatString="0"
+                                            Maximum="1024"
+                                            Minimum="0"
+                                            Value="{Binding Global.AutoPositionBottom, Mode=TwoWay}" />
+                                    </controls:SettingCard>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
